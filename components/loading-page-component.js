@@ -1,4 +1,4 @@
-import { renderHeaderComponent } from './header-component.js'
+import { renderHeaderComponent } from './header-component'
 
 /**
  * Компонент страницы загрузки.

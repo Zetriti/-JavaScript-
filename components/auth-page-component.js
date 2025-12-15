@@ -1,6 +1,7 @@
-import { loginUser, registerUser } from '../api.js'
-import { renderHeaderComponent } from './header-component.js'
-import { renderUploadImageComponent } from './upload-image-component.js'
+import { loginUser, registerUser } from '../api'
+import { renderHeaderComponent } from './header-component'
+import { renderUploadImageComponent } from './upload-image-component'
+import { sanitizeInput } from './utils'
 
 /**
  * Компонент страницы авторизации.
@@ -98,18 +99,18 @@ export function renderAuthPageComponent({ appEl, setUser }) {
             })
         }
 
-        // Обработка клика на кнопку входа/регистрации
         document
             .getElementById('login-button')
             .addEventListener('click', () => {
                 setError('')
 
                 if (isLoginMode) {
-                    // Обработка входа
-                    const login = document.getElementById('login-input').value
-                    const password =
-                        document.getElementById('password-input').value
-
+                    const login = sanitizeInput(
+                        document.getElementById('login-input').value,
+                    )
+                    const password = sanitizeInput(
+                        document.getElementById('password-input').value,
+                    )
                     if (!login) {
                         alert('Введите логин')
                         return
@@ -129,12 +130,15 @@ export function renderAuthPageComponent({ appEl, setUser }) {
                             setError(error.message)
                         })
                 } else {
-                    // Обработка регистрации
-                    const login = document.getElementById('login-input').value
-                    const name = document.getElementById('name-input').value
-                    const password =
-                        document.getElementById('password-input').value
-
+                    const login = sanitizeInput(
+                        document.getElementById('login-input').value,
+                    )
+                    const name = sanitizeInput(
+                        document.getElementById('name-input').value,
+                    )
+                    const password = sanitizeInput(
+                        document.getElementById('password-input').value,
+                    )
                     if (!name) {
                         alert('Введите имя')
                         return
@@ -166,15 +170,13 @@ export function renderAuthPageComponent({ appEl, setUser }) {
                 }
             })
 
-        // Обработка переключения режима (вход ↔ регистрация)
         document
             .getElementById('toggle-button')
             .addEventListener('click', () => {
                 isLoginMode = !isLoginMode
-                renderForm() // Перерисовываем форму с новым режимом
+                renderForm()
             })
     }
 
-    // Инициализация формы
     renderForm()
 }

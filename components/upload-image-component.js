@@ -1,4 +1,4 @@
-import { uploadImage } from '../api.js'
+import { uploadImage } from '../api'
 
 /**
  * Компонент загрузки изображения.

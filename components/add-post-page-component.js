@@ -1,5 +1,6 @@
-import { renderHeaderComponent } from './header-component.js'
-import { renderUploadImageComponent } from './upload-image-component.js'
+import { renderHeaderComponent } from './header-component'
+import { renderUploadImageComponent } from './upload-image-component'
+import { sanitizeInput } from './utils'
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     let imageUrl = ''
@@ -80,7 +81,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         })
 
         document.getElementById('add-button').addEventListener('click', () => {
-            description = descriptionInput.value.trim()
+            description = sanitizeInput(descriptionInput.value.trim())
 
             let hasError = false
 

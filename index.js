@@ -1,22 +1,27 @@
-import { getPosts, addPost } from './api.js'
-import { renderAddPostPageComponent } from './components/add-post-page-component.js'
-import { renderAuthPageComponent } from './components/auth-page-component.js'
+import './styles.css'
+import './ui-kit.css'
+import { getPosts, addPost, getUserPosts, likePost, dislikePost } from './api'
+import { renderAddPostPageComponent } from './components/add-post-page-component'
+import { renderAuthPageComponent } from './components/auth-page-component'
+import { renderUserPostsPageComponent } from './components/user-posts-page-component'
+
 import {
     ADD_POSTS_PAGE,
     AUTH_PAGE,
     LOADING_PAGE,
     POSTS_PAGE,
     USER_POSTS_PAGE,
-} from './routes.js'
-import { renderPostsPageComponent } from './components/posts-page-component.js'
-import { renderLoadingPageComponent } from './components/loading-page-component.js'
+} from './routes'
+import { renderPostsPageComponent } from './components/posts-page-component'
+import { renderLoadingPageComponent } from './components/loading-page-component'
 import {
     getUserFromLocalStorage,
     removeUserFromLocalStorage,
     saveUserToLocalStorage,
-} from './helpers.js'
+} from './helpers'
 
 export let user = getUserFromLocalStorage()
+window.user = user
 export let page = null
 export let posts = []
 
@@ -27,13 +32,11 @@ const getToken = () => {
 
 export const logout = () => {
     user = null
+    window.user = null
     removeUserFromLocalStorage()
     goToPage(POSTS_PAGE)
 }
 
-/**
- * Включает страницу приложения
- */
 export const goToPage = (newPage, data) => {
     if (
         [
@@ -45,7 +48,6 @@ export const goToPage = (newPage, data) => {
         ].includes(newPage)
     ) {
         if (newPage === ADD_POSTS_PAGE) {
-            /* Если пользователь не авторизован, то отправляем его на страницу авторизации перед добавлением поста */
             page = user ? ADD_POSTS_PAGE : AUTH_PAGE
             return renderApp()
         }
@@ -67,11 +69,22 @@ export const goToPage = (newPage, data) => {
         }
 
         if (newPage === USER_POSTS_PAGE) {
-            // @@TODO: реализовать получение постов юзера из API
-            console.log('Открываю страницу пользователя: ', data.userId)
-            page = USER_POSTS_PAGE
-            posts = []
-            return renderApp()
+            page = LOADING_PAGE
+            renderApp()
+
+            return getUserPosts({
+                token: getToken(),
+                userId: data.userId,
+            })
+                .then((newPosts) => {
+                    page = USER_POSTS_PAGE
+                    posts = newPosts
+                    renderApp()
+                })
+                .catch((error) => {
+                    console.error(error)
+                    goToPage(POSTS_PAGE)
+                })
         }
 
         page = newPage
@@ -98,6 +111,7 @@ const renderApp = () => {
             appEl,
             setUser: (newUser) => {
                 user = newUser
+                window.user = newUser
                 saveUserToLocalStorage(user)
                 goToPage(POSTS_PAGE)
             },
@@ -110,7 +124,6 @@ const renderApp = () => {
         return renderAddPostPageComponent({
             appEl,
             onAddPostClick({ description, imageUrl }) {
-                // Отправляем пост в API
                 addPost({
                     token: getToken(),
                     description,
@@ -119,27 +132,21 @@ const renderApp = () => {
                     .then((response) => {
                         console.log('Ответ от сервера:', response)
                         if (response.result === 'ok') {
-                            // После успешного добавления, получаем обновленный список постов
                             return getPosts({ token: getToken() })
                         } else {
                             throw new Error('Ошибка при добавлении поста')
                         }
                     })
                     .then((newPosts) => {
-                        // Обновляем глобальный массив постов и переходим на страницу постов
                         posts = newPosts
                         goToPage(POSTS_PAGE)
                     })
                     .catch((error) => {
                         console.error('Ошибка при добавлении поста:', error)
-                        // Показываем более информативное сообщение об ошибке
                         const errorMessage =
                             error.message ||
                             'Ошибка при добавлении поста. Попробуйте еще раз.'
                         alert(errorMessage)
-
-                        // В случае ошибки возвращаем пользователя на страницу добавления поста
-                        // чтобы он мог попробовать снова
                         page = ADD_POSTS_PAGE
                         renderApp()
                     })
@@ -154,10 +161,10 @@ const renderApp = () => {
     }
 
     if (page === USER_POSTS_PAGE) {
-        // @TODO: реализовать страницу с фотографиями отдельного пользвателя
-        appEl.innerHTML = 'Здесь будет страница фотографий пользователя'
-        return
+        return renderUserPostsPageComponent({
+            appEl,
+        })
     }
 }
-
+export { likePost, dislikePost }
 goToPage(POSTS_PAGE)
