@@ -1,0 +1,47 @@
+{
+    "name": "-javascript-",
+    "version": "1.0.0",
+    "description": "MVP социальной сети для обмена фотографиями",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack serve --mode development --config webpack.config.js",
+        "build": "webpack --mode production --config webpack.config.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Zetriti/-JavaScript-.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/Zetriti/-JavaScript-/issues"
+    },
+    "homepage": "https://github.com/Zetriti/-JavaScript-#readme",
+    "dependencies": {
+        "date-fns": "^4.1.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.5",
+        "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+        "@babel/preset-env": "^7.28.5",
+        "@babel/preset-react": "^7.28.5",
+        "@eslint/js": "^9.39.2",
+        "@svgr/webpack": "^8.1.0",
+        "babel-loader": "^10.0.0",
+        "copy-webpack-plugin": "^11.0.0",
+        "css-loader": "^7.1.2",
+        "eslint": "^9.39.2",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "globals": "^16.5.0",
+        "html-webpack-plugin": "^5.6.5",
+        "prettier": "^3.7.4",
+        "style-loader": "^4.0.0",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.103.0",
+        "webpack-cli": "^6.0.1",
+        "webpack-dev-server": "^5.2.2"
+    }
+}
