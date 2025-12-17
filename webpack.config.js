@@ -32,6 +32,13 @@ module.exports = {
                     filename: 'assets/images/[name][ext]',
                 },
             },
+            {
+                test: /\.(woff2?|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/fonts/[name][ext]',
+                },
+            },
         ],
     },
     plugins: [

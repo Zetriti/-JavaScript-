@@ -1,7 +1,6 @@
 import { loginUser, registerUser } from '../api'
 import { renderHeaderComponent } from './header-component'
 import { renderUploadImageComponent } from './upload-image-component'
-import { sanitizeInput } from './utils'
 
 /**
  * Компонент страницы авторизации.
@@ -105,12 +104,11 @@ export function renderAuthPageComponent({ appEl, setUser }) {
                 setError('')
 
                 if (isLoginMode) {
-                    const login = sanitizeInput(
-                        document.getElementById('login-input').value,
-                    )
-                    const password = sanitizeInput(
-                        document.getElementById('password-input').value,
-                    )
+                    const login = document.getElementById('login-input').value
+
+                    const password =
+                        document.getElementById('password-input').value
+
                     if (!login) {
                         alert('Введите логин')
                         return
@@ -130,15 +128,13 @@ export function renderAuthPageComponent({ appEl, setUser }) {
                             setError(error.message)
                         })
                 } else {
-                    const login = sanitizeInput(
-                        document.getElementById('login-input').value,
-                    )
-                    const name = sanitizeInput(
-                        document.getElementById('name-input').value,
-                    )
-                    const password = sanitizeInput(
-                        document.getElementById('password-input').value,
-                    )
+                    const login = document.getElementById('login-input').value
+
+                    const name = document.getElementById('name-input').value
+
+                    const password =
+                        document.getElementById('password-input').value
+
                     if (!name) {
                         alert('Введите имя')
                         return

@@ -1,4 +1,3 @@
-import { sanitizeInput } from './components/utils'
 const personalKey = 'Gerasimov'
 const baseHost = 'https://webdev-hw-api.vercel.app'
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`
@@ -67,7 +66,7 @@ export function uploadImage({ file }) {
 }
 
 export function addPost({ token, description, imageUrl }) {
-    const safeDescription = sanitizeInput(description.trim())
+    const safeDescription = description.trim()
     const postData = {
         description: safeDescription,
         imageUrl: imageUrl.trim(),

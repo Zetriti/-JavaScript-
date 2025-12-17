@@ -1,7 +1,7 @@
 import { renderHeaderComponent } from './header-component'
 import { posts, goToPage, likePost, dislikePost } from '../index'
 import { POSTS_PAGE } from '../routes'
-import { formatDate } from './utils'
+import { formatDate, sanitizeInput } from './utils'
 
 export function renderUserPostsPageComponent({ appEl }) {
     console.log('Посты пользователя:', posts)
@@ -55,11 +55,11 @@ export function renderUserPostsPageComponent({ appEl }) {
             (post) => `
                 <li class="post">
                     <div class="post-header">
-                        <img src="${post.user.imageUrl}" class="post-header__user-image" alt="${post.user.name}">
-                        <p class="post-header__user-name">${post.user.name}</p>
+                        <img src="${post.user.imageUrl}" class="post-header__user-image" alt="${sanitizeInput(post.user.name)}">
+                        <p class="post-header__user-name">${sanitizeInput(post.user.name)}</p>
                     </div>
                     <div class="post-image-container">
-                        <img class="post-image" src="${post.imageUrl}" alt="Пост пользователя ${post.user.name}">
+                        <img class="post-image" src="${post.imageUrl}" alt="Пост пользователя ${sanitizeInput(post.user.name)}">
                     </div>
                     <div class="post-likes">
                         <button data-post-id="${post.id}" class="like-button">
@@ -70,8 +70,8 @@ export function renderUserPostsPageComponent({ appEl }) {
                         </p>
                     </div>
                     <p class="post-text">
-                        <span class="user-name">${post.user.name}</span>
-                        ${post.description}
+                        ${sanitizeInput(post.user.name)}
+                        ${sanitizeInput(post.description)}
                     </p>
                     <p class="post-date">
                         ${formatDate(post.createdAt)}
@@ -86,7 +86,7 @@ export function renderUserPostsPageComponent({ appEl }) {
             <div class="header-container"></div>
             <div class="posts-user-header">
                 <img src="${user.imageUrl}" class="posts-user-header__user-image">
-                <p class="posts-user-header__user-name">${user.name}</p>
+                <p class="posts-user-header__user-name">${sanitizeInput(user.name)}</p>
             </div>
             <ul class="posts">
                 ${postsHtml}

@@ -1,6 +1,5 @@
 import { renderHeaderComponent } from './header-component'
 import { renderUploadImageComponent } from './upload-image-component'
-import { sanitizeInput } from './utils'
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     let imageUrl = ''
@@ -81,7 +80,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         })
 
         document.getElementById('add-button').addEventListener('click', () => {
-            description = sanitizeInput(descriptionInput.value.trim())
+            description = descriptionInput.value.trim()
 
             let hasError = false
 

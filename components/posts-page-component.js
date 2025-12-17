@@ -1,7 +1,7 @@
 import { USER_POSTS_PAGE } from '../routes'
 import { renderHeaderComponent } from './header-component'
 import { posts, goToPage, likePost, dislikePost } from '../index'
-import { formatDate } from './utils'
+import { formatDate, sanitizeInput } from './utils'
 import { getLikeImagePath } from '../asset-manager'
 
 export function renderPostsPageComponent({ appEl }) {
@@ -51,15 +51,15 @@ export function renderPostsPageComponent({ appEl }) {
             (post) => `
     <li class="post">
       <div class="post-header" data-user-id="${post.user.id}">
-        <img src="${post.user.imageUrl}" class="post-header__user-image" alt="${
-            post.user.name
-        }">
-        <p class="post-header__user-name">${post.user.name}</p>
+        <img src="${post.user.imageUrl}" class="post-header__user-image" alt="${sanitizeInput(
+            post.user.name,
+        )}">
+        <p class="post-header__user-name">${sanitizeInput(post.user.name)}</p>
       </div>
       <div class="post-image-container">
-        <img class="post-image" src="${post.imageUrl}" alt="Пост пользователя ${
-            post.user.name
-        }">
+        <img class="post-image" src="${sanitizeInput(post.imageUrl)}" alt="Пост пользователя ${sanitizeInput(
+            post.user.name,
+        )}">
       </div>
       <div class="post-likes">
         <button data-post-id="${post.id}" class="like-button">
@@ -70,8 +70,8 @@ export function renderPostsPageComponent({ appEl }) {
         </p>
       </div>
       <p class="post-text">
-        <span class="user-name">${post.user.name}</span>
-        ${post.description}
+        <span class="user-name">${sanitizeInput(post.user.name)}</span>
+        ${sanitizeInput(post.description)}
       </p>
       <p class="post-date">
         ${formatDate(post.createdAt)}
@@ -112,4 +112,11 @@ export function renderPostsPageComponent({ appEl }) {
             handleLikeClick(postId, post.isLiked)
         })
     }
+    posts.forEach((post, index) => {
+        console.log(`Пост ${index}:`, {
+            name: post.user.name,
+            description: post.description,
+            descriptionRaw: JSON.stringify(post.description),
+        })
+    })
 }
